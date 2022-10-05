@@ -11,6 +11,14 @@ plugins {
     id 'application'
 }
 
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'com.de_alone.dokkang.DokkangServerApplication',
+        )
+    }
+}
+
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
@@ -26,7 +34,7 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClass = 'com.de_alone.dokkang.App'
+    mainClass = 'com.de_alone.dokkang.DokkangServerApplication'
 }
 
 tasks.named('test') {
