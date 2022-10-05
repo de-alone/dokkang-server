@@ -3,12 +3,12 @@
  */
 package com.de_alone.dokkang;
 
-public class App {
+public class DokkangServerApplication {
     public String getGreeting() {
         return "Hello World!";
     }
 
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+        System.out.println(new DokkangServerApplication().getGreeting());
     }
 }
