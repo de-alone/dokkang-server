@@ -7,8 +7,8 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AppTest {
-    @Test void appHasAGreeting() {
-        DokkangServerApplication classUnderTest = new DokkangServerApplication();
-        assertNotNull(classUnderTest.getGreeting(), "app should have a greeting");
+    @Test void appHasStatus() {
+        DokkangServerApplication statusFunctionTest = new DokkangServerApplication();
+        assertEquals(statusFunctionTest.status(), "{\"status\": \"ok\"}");
     }
 }
