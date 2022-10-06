@@ -14,10 +14,10 @@ $ ./gradlew build
 BUILD SUCCESSFUL in 634ms
 7 actionable tasks: 7 up-to-date
 
-$ ls app/build/libs/app.jar                 
-app/build/libs/app.jar
+$ ls build/libs/dokkang-server.jar                 
+build/libs/dokkang-server.jar
 
-$ java -jar app/build/libs/app.jar
+$ java -jar build/libs/dokkang-server.jar
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
 ( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
@@ -26,7 +26,7 @@ $ java -jar app/build/libs/app.jar
  =========|_|==============|___/=/_/_/_/
  :: Spring Boot ::                (v2.7.4)
 
-2022-10-07 01:16:06.817  INFO 94667 --- [           main] c.d.dokkang.DokkangServerApplication     : Starting DokkangServerApplication using Java 17.0.4.1 on PSJ-MacPro.local with PID 94667 (/Users/psj8252/dokkang-dokkang/dokkang-server/app/build/libs/app.jar started by psj8252 in /Users/psj8252/dokkang-dokkang/dokkang-server)
+2022-10-07 01:16:06.817  INFO 94667 --- [           main] c.d.dokkang.DokkangServerApplication     : Starting DokkangServerApplication using Java 17.0.4.1 on PSJ-MacPro.local with PID 94667 (/Users/psj8252/dokkang-dokkang/dokkang-server/build/libs/dokkang-server.jar started by psj8252 in /Users/psj8252/dokkang-dokkang/dokkang-server)
 2022-10-07 01:16:06.820  INFO 94667 --- [           main] c.d.dokkang.DokkangServerApplication     : No active profile set, falling back to 1 default profile: "default"
 2022-10-07 01:16:07.614  INFO 94667 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
 2022-10-07 01:16:07.623  INFO 94667 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
@@ -61,7 +61,7 @@ $ ./gradlew run
  =========|_|==============|___/=/_/_/_/
  :: Spring Boot ::                (v2.7.4)
 
-2022-10-07 01:16:35.518  INFO 94931 --- [           main] c.d.dokkang.DokkangServerApplication     : Starting DokkangServerApplication using Java 17.0.4.1 on PSJ-MacPro.local with PID 94931 (/Users/psj8252/dokkang-dokkang/dokkang-server/app/build/classes/java/main started by psj8252 in /Users/psj8252/dokkang-dokkang/dokkang-server/app)
+2022-10-07 01:16:35.518  INFO 94931 --- [           main] c.d.dokkang.DokkangServerApplication     : Starting DokkangServerApplication using Java 17.0.4.1 on PSJ-MacPro.local with PID 94931 (/Users/psj8252/dokkang-dokkang/dokkang-server/build/classes/java/main started by psj8252 in /Users/psj8252/dokkang-dokkang/dokkang-server/app)
 2022-10-07 01:16:35.521  INFO 94931 --- [           main] c.d.dokkang.DokkangServerApplication     : No active profile set, falling back to 1 default profile: "default"
 2022-10-07 01:16:36.111  INFO 94931 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
 2022-10-07 01:16:36.122  INFO 94931 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
