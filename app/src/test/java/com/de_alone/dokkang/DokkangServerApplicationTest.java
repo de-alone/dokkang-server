@@ -10,5 +10,6 @@ class AppTest {
     @Test void appHasAGreeting() {
         DokkangServerApplication classUnderTest = new DokkangServerApplication();
         assertNotNull(classUnderTest.getGreeting(), "app should have a greeting");
+        assertNotNull(null);
     }
 }
