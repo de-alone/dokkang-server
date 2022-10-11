@@ -1,18 +1,14 @@
 package com.de_alone.dokkang.payload.response;
 
-import java.util.List;
-
 public class UserInfoResponse {
 	private Long id;
 	private String username;
 	private String email;
-	private List<String> roles;
 
-	public UserInfoResponse(Long id, String username, String email, List<String> roles) {
+	public UserInfoResponse(Long id, String username, String email) {
 		this.id = id;
 		this.username = username;
 		this.email = email;
-		this.roles = roles;
 	}
 
 	public Long getId() {
@@ -39,7 +35,5 @@ public class UserInfoResponse {
 		this.username = username;
 	}
 
-	public List<String> getRoles() {
-		return roles;
-	}
+
 }
