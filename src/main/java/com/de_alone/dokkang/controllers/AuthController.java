@@ -4,7 +4,7 @@ import com.de_alone.dokkang.models.User;
 import com.de_alone.dokkang.payload.request.LoginRequest;
 import com.de_alone.dokkang.payload.request.SignupRequest;
 import com.de_alone.dokkang.payload.response.MessageResponse;
-import com.de_alone.dokkang.payload.response.UserInfoResponse;
+import com.de_alone.dokkang.payload.response.LoginResponse;
 import com.de_alone.dokkang.repository.UserRepository;
 import com.de_alone.dokkang.security.jwt.JwtUtils;
 import com.de_alone.dokkang.security.services.UserDetailsImpl;
@@ -47,13 +47,9 @@ public class AuthController {
 
     UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
-    ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
+    String jwtToken = jwtUtils.generateTokenFromUsername(userDetails.getUsername());
 
-
-    return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-        .body(new UserInfoResponse(userDetails.getId(),
-                                   userDetails.getUsername(),
-                                   userDetails.getEmail()));
+    return ResponseEntity.ok().body(new LoginResponse(jwtToken));
   }
 
   @PostMapping("/signup")
