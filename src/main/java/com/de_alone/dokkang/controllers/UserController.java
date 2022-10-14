@@ -37,7 +37,7 @@ public class UserController {
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
         //TODO : check logics
 //        if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-//            return ResponseHandler.generateResponse("Successfully added data!", HttpStatus.OK, result);
+//            return ResponseHandler.generateResponse("username already exists!", HttpStatus);
 //        }
         String email_address = signUpRequest.getEmail();
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
