@@ -2,7 +2,7 @@ package com.de_alone.dokkang.controllers;
 
 import com.de_alone.dokkang.models.User;
 import com.de_alone.dokkang.payload.request.SignupRequest;
-import com.de_alone.dokkang.payload.response.MessageResponse;
+import com.de_alone.dokkang.payload.response.ResponseHandler;
 import com.de_alone.dokkang.repository.UserRepository;
 import com.de_alone.dokkang.security.jwt.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +10,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus;
+
 
 import javax.validation.Valid;
+
+
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -31,13 +35,16 @@ public class UserController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-        if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
-        }
-
+        //TODO : check logics
+//        if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+//            return ResponseHandler.generateResponse("Successfully added data!", HttpStatus.OK, result);
+//        }
+        String email_address = signUpRequest.getEmail();
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
+            return ResponseHandler.generateResponse("User id already exist", HttpStatus.CONFLICT);
         }
+        //TODO : Check Email Acceptance(format)
+
 
         // Create new user's account
         User user = new User(signUpRequest.getUsername(),
@@ -47,7 +54,7 @@ public class UserController {
 
         userRepository.save(user);
 
-        //    FIXME 명세에 맞게 수정
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+        return ResponseHandler.generateResponse("Successfully added data!", HttpStatus.OK);
     }
+
 }
