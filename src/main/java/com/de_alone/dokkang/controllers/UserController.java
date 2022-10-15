@@ -7,7 +7,6 @@ import com.de_alone.dokkang.repository.UserRepository;
 import com.de_alone.dokkang.security.jwt.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
@@ -19,11 +18,8 @@ import javax.validation.Valid;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/user")
 public class UserController {
-    @Autowired
-    AuthenticationManager authenticationManager;
-
     @Autowired
     UserRepository userRepository;
 
@@ -33,25 +29,21 @@ public class UserController {
     @Autowired
     JwtUtils jwtUtils;
 
-    @PostMapping("/signup")
+    @PostMapping
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-        //TODO : check logics
-//        if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-//            return ResponseHandler.generateResponse("username already exists!", HttpStatus);
-//        }
-        String email_address = signUpRequest.getEmail();
-        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            return ResponseHandler.generateResponse("User id already exist", HttpStatus.CONFLICT);
-        }
-        //TODO : Check Email Acceptance(format)
+        String username = signUpRequest.getUsername();
+        String email = signUpRequest.getEmail();
+        String password = signUpRequest.getPassword();
 
+        if (userRepository.existsByUsername(username)) {
+           return ResponseHandler.generateResponse("username already exists!", HttpStatus.CONFLICT);
+        }
+        if (userRepository.existsByEmail(email)) {
+            return ResponseHandler.generateResponse("emgail address already exists!", HttpStatus.CONFLICT);
+        }
 
         // Create new user's account
-        User user = new User(signUpRequest.getUsername(),
-                signUpRequest.getEmail(),
-                encoder.encode(signUpRequest.getPassword()));
-
-
+        User user = new User(username, email, encoder.encode(password));
         userRepository.save(user);
 
         return ResponseHandler.generateResponse("Successfully added data!", HttpStatus.OK);
