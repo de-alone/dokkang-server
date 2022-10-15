@@ -1,4 +1,4 @@
-package com.de_alone.dokkang.security.services;
+package com.de_alone.dokkang.services;
 
 import com.de_alone.dokkang.models.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;

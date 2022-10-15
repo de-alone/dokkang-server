@@ -1,4 +1,4 @@
-package com.de_alone.dokkang.security.services;
+package com.de_alone.dokkang.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

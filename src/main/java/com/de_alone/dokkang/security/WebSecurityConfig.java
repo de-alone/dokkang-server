@@ -3,6 +3,7 @@ package com.de_alone.dokkang.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -16,7 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.de_alone.dokkang.security.jwt.AuthEntryPointJwt;
 import com.de_alone.dokkang.security.jwt.AuthTokenFilter;
-import com.de_alone.dokkang.security.services.UserDetailsServiceImpl;
+import com.de_alone.dokkang.services.UserDetailsServiceImpl;
 
 @Configuration
 @EnableGlobalMethodSecurity(
@@ -61,7 +62,7 @@ public class WebSecurityConfig {
         .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
         .authorizeRequests().antMatchers("/auth").permitAll()
-        .antMatchers("/user").permitAll()
+        .antMatchers(HttpMethod.POST, "/user").permitAll()
         .antMatchers("/status").permitAll()
         .anyRequest().authenticated();
 

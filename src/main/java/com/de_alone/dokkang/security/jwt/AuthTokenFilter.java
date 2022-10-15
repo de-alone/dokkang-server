@@ -1,6 +1,6 @@
 package com.de_alone.dokkang.security.jwt;
 
-import com.de_alone.dokkang.security.services.UserDetailsServiceImpl;
+import com.de_alone.dokkang.services.UserDetailsServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
