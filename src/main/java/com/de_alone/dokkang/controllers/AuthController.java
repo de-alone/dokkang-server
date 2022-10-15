@@ -4,7 +4,7 @@ import com.de_alone.dokkang.payload.request.LoginRequest;
 import com.de_alone.dokkang.payload.response.LoginResponse;
 import com.de_alone.dokkang.repository.UserRepository;
 import com.de_alone.dokkang.security.jwt.JwtUtils;
-import com.de_alone.dokkang.security.services.UserDetailsImpl;
+import com.de_alone.dokkang.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
