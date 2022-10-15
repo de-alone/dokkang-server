@@ -29,15 +29,14 @@ class AuthControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
     @DisplayName("Login Test")
     @Test
     public void testAuthentication() throws Exception {
         Map<String, String> input = new HashMap<>();
         input.put("username", "helloworld");
         input.put("password", "newbee...");
+
+        ObjectMapper objectMapper = new ObjectMapper();
 
         RequestBuilder request = MockMvcRequestBuilders.post("/auth")
                 .contentType(MediaType.APPLICATION_JSON)
