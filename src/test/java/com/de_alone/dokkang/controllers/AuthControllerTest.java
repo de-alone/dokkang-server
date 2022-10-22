@@ -37,19 +37,19 @@ class AuthControllerTest {
     @MockBean
     UserRepository userRepository;
 
-    @DisplayName("Login Test")
-    @Test
-    public void testAuthentication() throws Exception {
-        Map<String, String> input = new HashMap<>();
-        input.put("username", username);
-        input.put("password", password);
+    // @DisplayName("Login Test")
+    // @Test
+    // public void testAuthentication() throws Exception {
+    //     Map<String, String> input = new HashMap<>();
+    //     input.put("username", username);
+    //     input.put("password", password);
 
-        ObjectMapper objectMapper = new ObjectMapper();
+    //     ObjectMapper objectMapper = new ObjectMapper();
 
-        RequestBuilder request = MockMvcRequestBuilders.post("/auth")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(input));
+    //     RequestBuilder request = MockMvcRequestBuilders.post("/auth")
+    //             .contentType(MediaType.APPLICATION_JSON)
+    //             .content(objectMapper.writeValueAsString(input));
 
-        mockMvc.perform(request);
-    }
+    //     mockMvc.perform(request);
+    // }
 }
