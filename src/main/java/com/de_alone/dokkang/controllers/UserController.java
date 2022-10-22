@@ -2,7 +2,7 @@ package com.de_alone.dokkang.controllers;
 
 import com.de_alone.dokkang.models.User;
 import com.de_alone.dokkang.payload.request.SignupRequest;
-import com.de_alone.dokkang.payload.response.ResponseHandler;
+import com.de_alone.dokkang.payload.response.SignupResponse;
 import com.de_alone.dokkang.repository.UserRepository;
 import com.de_alone.dokkang.security.jwt.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,17 +36,17 @@ public class UserController {
         String password = signUpRequest.getPassword();
 
         if (userRepository.existsByUsername(username)) {
-           return ResponseHandler.generateResponse("username already exists!", HttpStatus.CONFLICT);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new SignupResponse("Username is already taken!"));
         }
         if (userRepository.existsByEmail(email)) {
-            return ResponseHandler.generateResponse("emgail address already exists!", HttpStatus.CONFLICT);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new SignupResponse("Email is already in use!"));
         }
 
         // Create new user's account
         User user = new User(username, email, encoder.encode(password));
         userRepository.save(user);
 
-        return ResponseHandler.generateResponse("Successfully added data!", HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new SignupResponse("User registered successfully!"));
     }
 
 }
