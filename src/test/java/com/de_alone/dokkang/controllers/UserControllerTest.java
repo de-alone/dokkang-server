@@ -13,7 +13,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -25,14 +24,16 @@ import com.de_alone.dokkang.DokkangServerApplication;
 import com.de_alone.dokkang.models.User;
 import static org.mockito.BDDMockito.given;
 
+
 @RunWith(SpringRunner.class)
 @ContextConfiguration
 @AutoConfigureMockMvc
 @SpringBootTest(classes = DokkangServerApplication.class)
-class AuthControllerTest {
+class UserControllerTest {
 
     private String username = "helloworld";
     private String password = "newbee...";
+    private String email = "email@email.com";
 
     @Autowired
     private MockMvc mockMvc;
@@ -40,21 +41,24 @@ class AuthControllerTest {
     @MockBean
     UserRepository userRepository;
 
-    @DisplayName("Login Test")
+    @DisplayName("SignUp Test")
     @Test
-    public void testAuthentication() throws Exception {
+    public void testSignUp() throws Exception {
         User user = new User();
         user.setUsername("username");
         user.setPassword(password);
-        given(userRepository.findByUsername("username")).willReturn(Optional.of(user));
+        user.setEmail(email);
+        given(userRepository.existsByUsername("username")).willReturn(false);
+        given(userRepository.existsByEmail(email)).willReturn(false);
 
         Map<String, String> input = new HashMap<>();
         input.put("username", username);
         input.put("password", password);
+        input.put("email", email);
 
         ObjectMapper objectMapper = new ObjectMapper();
 
-        RequestBuilder request = MockMvcRequestBuilders.post("/auth")
+        RequestBuilder request = MockMvcRequestBuilders.post("/user")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(input));
 
