@@ -13,6 +13,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -21,6 +22,9 @@ import com.de_alone.dokkang.repository.UserRepository;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.de_alone.dokkang.DokkangServerApplication;
+import com.de_alone.dokkang.models.User;
+import static org.mockito.BDDMockito.given;
+
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration
@@ -37,19 +41,25 @@ class AuthControllerTest {
     @MockBean
     UserRepository userRepository;
 
-    // @DisplayName("Login Test")
-    // @Test
-    // public void testAuthentication() throws Exception {
-    //     Map<String, String> input = new HashMap<>();
-    //     input.put("username", username);
-    //     input.put("password", password);
+    @DisplayName("Login Test")
+    @Test
+    public void testAuthentication() throws Exception {
+        User user = new User();
+        user.setUsername("username");
+        user.setPassword(password);
+        given(userRepository.findByUsername("username")).willReturn(Optional.of(user));
 
-    //     ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, String> input = new HashMap<>();
+        input.put("username", username);
+        input.put("password", password);
 
-    //     RequestBuilder request = MockMvcRequestBuilders.post("/auth")
-    //             .contentType(MediaType.APPLICATION_JSON)
-    //             .content(objectMapper.writeValueAsString(input));
+        ObjectMapper objectMapper = new ObjectMapper();
 
-    //     mockMvc.perform(request);
-    // }
+        RequestBuilder request = MockMvcRequestBuilders.post("/auth")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(input));
+
+        mockMvc.perform(request);
+    }
+
 }
