@@ -2,7 +2,9 @@ package com.de_alone.dokkang.controllers;
 
 import com.de_alone.dokkang.models.Lecture;
 import com.de_alone.dokkang.models.User;
+import com.de_alone.dokkang.models.UserLecture;
 import com.de_alone.dokkang.payload.request.SignupRequest;
+import com.de_alone.dokkang.payload.request.UpdateLectureRequest;
 import com.de_alone.dokkang.payload.response.LectureResponse;
 import com.de_alone.dokkang.payload.response.SignupResponse;
 import com.de_alone.dokkang.repository.LectureRepository;
@@ -65,4 +67,23 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(new LectureResponse("ok", lectures));
     }
 
+
+    @PutMapping("/{user_id}/lectures")
+    public ResponseEntity<?> getUserLectures(@RequestParam(required = false) String jwt, @PathVariable Long user_id, @Valid @RequestBody UpdateLectureRequest updateLectureRequest) {
+
+        userlectureRepository.deleteLectureById(user_id);
+
+        List<Long> lectureIds = updateLectureRequest.getLecture_id();
+
+        for(Long lectureId:lectureIds){
+            UserLecture userlecture = new UserLecture();
+            userlecture.setLectureId(lectureRepository.findById(lectureId)
+                    .orElseThrow(IllegalArgumentException::new));
+            userlecture.setUserId(userRepository.findById(user_id)
+                    .orElseThrow(IllegalArgumentException::new));
+            userlectureRepository.save(userlecture);
+        }
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(new SignupResponse("ok"));
+    }
 }
