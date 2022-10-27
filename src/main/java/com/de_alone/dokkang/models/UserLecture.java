@@ -11,12 +11,6 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-@Table(name = "userlecture",
-        uniqueConstraints = {
-                @UniqueConstraint(
-                        columnNames={"user_id", "lecture_id"}
-                )
-        })
 public class UserLecture {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,11 +18,11 @@ public class UserLecture {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user_id;
+    private User userId;
 
     @ManyToOne
     @JoinColumn(name = "lecture_id")
-    private Lecture lecture_id;
+    private Lecture lectureId;
 
 }
 

@@ -1,19 +1,22 @@
 package com.de_alone.dokkang.controllers;
 
+import com.de_alone.dokkang.models.Lecture;
 import com.de_alone.dokkang.models.User;
 import com.de_alone.dokkang.payload.request.SignupRequest;
+import com.de_alone.dokkang.payload.response.LectureResponse;
 import com.de_alone.dokkang.payload.response.SignupResponse;
+import com.de_alone.dokkang.repository.LectureRepository;
+import com.de_alone.dokkang.repository.UserLectureRepository;
 import com.de_alone.dokkang.repository.UserRepository;
 import com.de_alone.dokkang.security.jwt.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.http.HttpStatus;
-
 
 import javax.validation.Valid;
-
+import java.util.List;
 
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -22,6 +25,12 @@ import javax.validation.Valid;
 public class UserController {
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    UserLectureRepository userlectureRepository;
+
+    @Autowired
+    LectureRepository lectureRepository;
 
     @Autowired
     PasswordEncoder encoder;
@@ -47,6 +56,13 @@ public class UserController {
         userRepository.save(user);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(new SignupResponse("User registered successfully!"));
+    }
+
+    @GetMapping("/{user_id}/lectures")
+    public ResponseEntity<?> getUserLectures(@RequestParam(required = false) String jwt, @PathVariable Long user_id) {
+
+        List<Lecture> lectures = lectureRepository.findAllById(userlectureRepository.findLectureById(user_id));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new LectureResponse("ok", lectures));
     }
 
 }

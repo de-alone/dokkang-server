@@ -22,7 +22,7 @@ public class LectureController {
     JwtUtils jwtUtils;
 
     @GetMapping
-    public ResponseEntity<?> getLectures(@RequestParam String jwt) {
+    public ResponseEntity<?> getLectures(@RequestParam(required = false) String jwt) {
 
         List<Lecture> lectures = lectureRepository.findAll();
 
