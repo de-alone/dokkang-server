@@ -73,7 +73,7 @@ public class UserController {
 
         userlectureRepository.deleteLectureById(user_id);
 
-        List<Long> lectureIds = updateLectureRequest.getLecture_id();
+        List<Long> lectureIds = updateLectureRequest.getLecture_ids();
 
         for(Long lectureId:lectureIds){
             UserLecture userlecture = new UserLecture();
