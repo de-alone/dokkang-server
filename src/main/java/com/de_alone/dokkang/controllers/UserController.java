@@ -69,7 +69,7 @@ public class UserController {
 
 
     @PutMapping("/{user_id}/lectures")
-    public ResponseEntity<?> getUserLectures(@RequestParam(required = false) String jwt, @PathVariable Long user_id, @Valid @RequestBody UpdateLectureRequest updateLectureRequest) {
+    public ResponseEntity<?> updateUserLectures(@RequestParam(required = false) String jwt, @PathVariable Long user_id, @Valid @RequestBody UpdateLectureRequest updateLectureRequest) {
 
         userlectureRepository.deleteLectureById(user_id);
 
