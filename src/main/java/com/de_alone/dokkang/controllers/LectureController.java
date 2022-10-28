@@ -13,7 +13,7 @@ import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/lecture")
+@RequestMapping("/lectures")
 public class LectureController {
     @Autowired
     LectureRepository lectureRepository;
