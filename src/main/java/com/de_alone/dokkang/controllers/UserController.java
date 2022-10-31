@@ -64,7 +64,7 @@ public class UserController {
     public ResponseEntity<?> getUserLectures(@RequestParam(required = false) String jwt, @PathVariable Long user_id) {
 
         List<Lecture> lectures = lectureRepository.findAllById(userlectureRepository.findLectureById(user_id));
-        return ResponseEntity.status(HttpStatus.CREATED).body(new LectureResponse("ok", lectures));
+        return ResponseEntity.status(HttpStatus.OK).body(new LectureResponse("ok", lectures));
     }
 
 
@@ -84,6 +84,6 @@ public class UserController {
             userlectureRepository.save(userlecture);
         }
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(new SignupResponse("ok"));
+        return ResponseEntity.status(HttpStatus.OK).body(new SignupResponse("ok"));
     }
 }

@@ -26,6 +26,6 @@ public class LectureController {
 
         List<Lecture> lectures = lectureRepository.findAll();
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(new LectureResponse("ok", lectures));
+        return ResponseEntity.status(HttpStatus.OK).body(new LectureResponse("ok", lectures));
     }
 }
