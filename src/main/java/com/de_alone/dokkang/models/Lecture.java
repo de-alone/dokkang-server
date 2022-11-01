@@ -3,6 +3,7 @@ package com.de_alone.dokkang.models;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -12,6 +13,7 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Setter
 public class Lecture {
 
     @Id
