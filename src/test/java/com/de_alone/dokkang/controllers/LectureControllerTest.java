@@ -1,39 +1,53 @@
 package com.de_alone.dokkang.controllers;
 
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.List;
+
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.test.context.ContextConfiguration;
+
+import com.de_alone.dokkang.repository.LectureRepository;
+import org.springframework.boot.test.mock.mockito.MockBean;
+
+import com.de_alone.dokkang.DokkangServerApplication;
+import com.de_alone.dokkang.models.Lecture;
+
+import static org.mockito.BDDMockito.given;
 
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration
 @AutoConfigureMockMvc
-@SpringBootTest
-public class LectureControllerTest {
+@SpringBootTest(classes = DokkangServerApplication.class)
+class LectureControllerTest {
+
+    private List<Lecture> lectures = List.of(
+        new Lecture(0L, "SWE-0001", "Software1", "김민수"),
+        new Lecture(1L, "SWE-0002", "Software2", "박민정")
+    );
+
     @Autowired
     private MockMvc mockMvc;
-    //FIXME : ERROR at mock repository, dll file are not made.
-//
-//    @MockBean
-//    LectureRepository lectureRepository;
-//
-//    @DisplayName("Test of getting all lecture")
-//    @Test
-//    public void testGetLectures() throws Exception{
-//        Lecture lecture1 = new Lecture(101L,"no", "name", "prof");
-//        Lecture lecture2 = new Lecture(102L,"no2", "name2", "prof2");
-//
-//        List<Lecture> listOfLecture = List.of(lecture1, lecture2);
-////        Mockito.when(lectureRepository.save(any(Lecture.class)))
-////                .thenReturn(lecture1);
-//        Mockito.when(lectureRepository.save(lecture1))
-//                .thenReturn(lecture1);
-//        Mockito.when(lectureRepository.save(lecture2))
-//                .thenReturn(lecture2);
-//        assertEquals(listOfLecture, lectureRepository.findAll());
-//    }
+
+    @MockBean
+    LectureRepository lectureRepository;
+
+    @DisplayName("Get all Lectures Test")
+    @Test
+    public void testSignUp() throws Exception {
+        given(lectureRepository.findAll()).willReturn(lectures);
+
+        RequestBuilder request = MockMvcRequestBuilders.get("/lectures");
+
+        mockMvc.perform(request);
+    }
 }
