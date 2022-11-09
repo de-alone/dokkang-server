@@ -5,7 +5,6 @@ import com.de_alone.dokkang.models.User;
 import com.de_alone.dokkang.models.UserLecture;
 import com.de_alone.dokkang.payload.request.SignupRequest;
 import com.de_alone.dokkang.payload.request.UpdateLectureRequest;
-import com.de_alone.dokkang.payload.request.UserRequest;
 import com.de_alone.dokkang.payload.response.LectureResponse;
 import com.de_alone.dokkang.payload.response.SignupResponse;
 import com.de_alone.dokkang.payload.response.UserResponse;
@@ -13,7 +12,6 @@ import com.de_alone.dokkang.repository.LectureRepository;
 import com.de_alone.dokkang.repository.UserLectureRepository;
 import com.de_alone.dokkang.repository.UserRepository;
 import com.de_alone.dokkang.security.jwt.JwtUtils;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -63,10 +61,8 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(new SignupResponse("User registered successfully!"));
     }
 
-    @GetMapping
-    public ResponseEntity<?> readUserDetail(@RequestParam(required=false) String jwt,
-                                                 @RequestBody UserRequest userDetailRequest){
-        Long user_id = userDetailRequest.getId();
+    @GetMapping("/{user_id}")
+    public ResponseEntity<?> readUserDetail(@RequestParam(required=false) String jwt, @PathVariable Long user_id) {
         User user = userRepository.findById(user_id).orElseThrow(IllegalArgumentException::new);
         return ResponseEntity.status(HttpStatus.OK).body(
                 new UserResponse("ok",user_id,user.getUsername(), user.getEmail()));
