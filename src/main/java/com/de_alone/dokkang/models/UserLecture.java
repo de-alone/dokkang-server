@@ -38,5 +38,7 @@ public class UserLecture {
         this.lectureId = lectureId;
     }
 
+    public Long getId() {return id;}
+
 }
 

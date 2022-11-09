@@ -1,5 +1,6 @@
 package com.de_alone.dokkang.controllers;
 
+import com.de_alone.dokkang.models.UserLecture;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.junit.jupiter.api.DisplayName;
@@ -12,9 +13,8 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.sql.Array;
+import java.util.*;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -77,6 +77,18 @@ class UserControllerTest {
         mockMvc.perform(request);
     }
 
+    @DisplayName("ReadUserDetail")
+    @Test
+    public void testReadUserDetail() throws Exception{
+        Long testId = 0L;
+        User user = new User("testUserName", "test@test.com", "testPassword");
+        given(userRepository.findById(testId)).willReturn(Optional.of(user));
+
+        RequestBuilder request = MockMvcRequestBuilders.get("/user");
+
+        mockMvc.perform(request);
+    }
+
     @DisplayName("Get Lectures of User Test")
     @Test
     public void testGetLecturesOfUser() throws Exception {
@@ -91,4 +103,39 @@ class UserControllerTest {
         mockMvc.perform(request);
     }
 
+    @DisplayName("Testing updateUserLecture")
+    @Test
+    public void testUpdateUserLectures() throws Exception {
+
+        Long testUserId = 0L;
+        User user = new User();
+        List<Long> testLectureIds = List.of(0L, 1L, 2L, 3L);
+        ArrayList<Long> userlectureId = new ArrayList<Long>();
+        given(userLectureRepository.deleteLectureById(testUserId))
+                .willReturn(0);
+
+        for(Long lectureId: testLectureIds)
+        {
+            Lecture lecture = new Lecture();
+            UserLecture userlecture = new UserLecture();
+            given(lectureRepository.findById(lectureId)).willReturn(Optional.of(lecture));
+            given(userRepository.findById(testUserId)).willReturn(Optional.of(user));
+            userlecture.setLectureId(lectureRepository.findById(lectureId).orElseThrow());
+            userlecture.setUserId(userRepository.findById(testUserId).orElseThrow());
+            userlectureId.add(userlecture.getId());
+        }
+
+        Map<String, List<Long>> input = new HashMap<>();
+        input.put("lecture_ids", userlectureId);
+
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        RequestBuilder request = MockMvcRequestBuilders.put("/user/0/lectures")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(input));
+
+        mockMvc.perform(request);
+    }
 }
+
