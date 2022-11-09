@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -29,6 +30,8 @@ import com.de_alone.dokkang.DokkangServerApplication;
 import com.de_alone.dokkang.models.Lecture;
 import com.de_alone.dokkang.models.User;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @RunWith(SpringRunner.class)
@@ -105,10 +108,12 @@ class UserControllerTest {
 
     @DisplayName("Testing updateUserLecture")
     @Test
+    @WithMockUser(username = "user", password = "password")
     public void testUpdateUserLectures() throws Exception {
 
         Long testUserId = 0L;
         User user = new User();
+        Long userLectureId = 0L;
         List<Long> testLectureIds = List.of(0L, 1L, 2L, 3L);
         ArrayList<Long> userlectureId = new ArrayList<Long>();
         given(userLectureRepository.deleteLectureById(testUserId))
@@ -118,11 +123,13 @@ class UserControllerTest {
         {
             Lecture lecture = new Lecture();
             UserLecture userlecture = new UserLecture();
+            userlecture.setId(userLectureId);
             given(lectureRepository.findById(lectureId)).willReturn(Optional.of(lecture));
             given(userRepository.findById(testUserId)).willReturn(Optional.of(user));
             userlecture.setLectureId(lectureRepository.findById(lectureId).orElseThrow());
             userlecture.setUserId(userRepository.findById(testUserId).orElseThrow());
             userlectureId.add(userlecture.getId());
+            userLectureId++;
         }
 
         Map<String, List<Long>> input = new HashMap<>();
@@ -135,7 +142,9 @@ class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(input));
 
-        mockMvc.perform(request);
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andDo(print());
     }
 }
 
