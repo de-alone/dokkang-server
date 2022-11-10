@@ -4,10 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.util.Date;
+import java.sql.Timestamp;
 
 @Entity
 @Getter
@@ -27,8 +28,8 @@ public class BoardPost {
     @JoinColumn(name = "lecture_id")
     private Lecture lectureId;
 
-    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private Date created_at;
+    @CreationTimestamp
+    private Timestamp created_at;
 
     @NotBlank
     private String title;
