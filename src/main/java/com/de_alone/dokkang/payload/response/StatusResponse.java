@@ -1,9 +1,9 @@
 package com.de_alone.dokkang.payload.response;
 
-public class SignupResponse {
+public class StatusResponse {
 	private String status;
 
-	public SignupResponse(String status) {
+	public StatusResponse(String status) {
 		this.status = status;
 	}
 
