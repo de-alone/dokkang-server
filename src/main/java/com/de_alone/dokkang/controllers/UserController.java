@@ -6,7 +6,7 @@ import com.de_alone.dokkang.models.UserLecture;
 import com.de_alone.dokkang.payload.request.SignupRequest;
 import com.de_alone.dokkang.payload.request.UpdateLectureRequest;
 import com.de_alone.dokkang.payload.response.LectureResponse;
-import com.de_alone.dokkang.payload.response.SignupResponse;
+import com.de_alone.dokkang.payload.response.StatusResponse;
 import com.de_alone.dokkang.payload.response.UserResponse;
 import com.de_alone.dokkang.repository.LectureRepository;
 import com.de_alone.dokkang.repository.UserLectureRepository;
@@ -48,17 +48,17 @@ public class UserController {
         String password = signUpRequest.getPassword();
 
         if (userRepository.existsByUsername(username)) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(new SignupResponse("Username is already taken!"));
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new StatusResponse("Username is already taken!"));
         }
         if (userRepository.existsByEmail(email)) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(new SignupResponse("Email is already in use!"));
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new StatusResponse("Email is already in use!"));
         }
 
         // Create new user's account
         User user = new User(username, email, encoder.encode(password));
         userRepository.save(user);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(new SignupResponse("User registered successfully!"));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new StatusResponse("User registered successfully!"));
     }
 
     @GetMapping("/{user_id}")
@@ -91,6 +91,6 @@ public class UserController {
             userlectureRepository.save(userlecture);
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(new SignupResponse("ok"));
+        return ResponseEntity.status(HttpStatus.OK).body(new StatusResponse("ok"));
     }
 }
