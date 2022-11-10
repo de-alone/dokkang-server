@@ -35,4 +35,11 @@ public class BoardPost {
 
     @Column(columnDefinition = "TEXT")
     private String content;
+
+    public BoardPost(Lecture lecture_id, User user_id, String title, String content) {
+        this.lectureId = lecture_id;
+        this.userId = user_id;
+        this.title = title;
+        this.content = content;
+    }
 }
