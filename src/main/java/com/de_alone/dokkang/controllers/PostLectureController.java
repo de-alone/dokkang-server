@@ -44,7 +44,7 @@ public class PostLectureController {
         String before = postLectureRequest.getBefore();
         Integer limit = postLectureRequest.getLimit();
 
-        LocalDateTime dateTime = LocalDateTime.parse(before, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        LocalDateTime dateTime = before != null ? LocalDateTime.parse(before, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) : LocalDateTime.now();
 
         List<BoardPost> boardPost = boardPostRepository.findAllByLectureId(lectureRepository.findById(lecture_id).orElseThrow(IllegalArgumentException::new));
         Collections.reverse(boardPost);
