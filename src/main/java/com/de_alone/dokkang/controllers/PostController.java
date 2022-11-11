@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -48,7 +49,7 @@ public class PostController {
         BoardPost boardPost = new BoardPost(lecture, user, title, content);
         boardPostRepository.save(boardPost);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(new StatusResponse("ok"));
+        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("status", "ok", "post_id", boardPost.getId()));
     }
 
     @GetMapping("/{post_id}")
