@@ -13,4 +13,5 @@ public class PostLecture {
     private String title;
     private Integer num_likes;
     private Integer num_comments;
+    private String created_at;
 }
