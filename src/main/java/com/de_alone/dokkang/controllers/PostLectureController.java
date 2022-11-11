@@ -58,7 +58,7 @@ public class PostLectureController {
                 else {
                     List<BoardComment> comment_list = boardCommentRepository.findAllByPostId(post);
                     List<BoardLike> like_list = boardLikeRepository.findAllByPostId(post);
-                    posts.add(new PostLecture(post.getId(), post.getLectureId().getId(), post.getTitle(), like_list.size() ,comment_list.size()));
+                    posts.add(new PostLecture(post.getId(), post.getLectureId().getId(), post.getTitle(), like_list.size() ,comment_list.size(), post.getCreated_at().toString()));
                     before = post.getCreated_at().toLocalDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
                     limit--;
                 }
