@@ -31,4 +31,10 @@ public class BoardComment {
 
     @Column(columnDefinition = "TEXT")
     private String content;
+
+    public BoardComment(BoardPost post_id, User user_id, String content) {
+        this.postId = post_id;
+        this.userId = user_id;
+        this.content = content;
+    }
 }
