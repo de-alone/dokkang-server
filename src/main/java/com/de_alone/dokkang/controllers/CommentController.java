@@ -13,6 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Map;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -32,13 +35,14 @@ public class CommentController {
     public ResponseEntity<?> registerLikePost(@Valid @RequestBody CreateCommentRequest createCommentRequest) {
         Long post_id = createCommentRequest.getPost_id();
         Long user_id = createCommentRequest.getUser_id();
+        Date created_at = Timestamp.valueOf(LocalDateTime.now());
         String content = createCommentRequest.getContent();
 
         BoardPost boardPost = boardPostRepository.findById(post_id).orElseThrow(IllegalArgumentException::new);
         User user = userRepository.findById(user_id).orElseThrow(IllegalArgumentException::new);
 
         // Create new boardComment
-        BoardComment boardComment = new BoardComment(boardPost, user, content);
+        BoardComment boardComment = new BoardComment(boardPost, user, created_at, content);
         boardCommentRepository.save(boardComment);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("status", "ok", "comment_id", boardComment.getId()));
