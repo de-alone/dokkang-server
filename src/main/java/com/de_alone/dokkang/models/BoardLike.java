@@ -24,4 +24,9 @@ public class BoardLike {
     @ManyToOne
     @JoinColumn(name = "board_post_id")
     private BoardPost postId;
+
+    public BoardLike(BoardPost post_id, User user_id) {
+        this.postId = post_id;
+        this.userId = user_id;
+    }
 }
