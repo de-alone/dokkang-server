@@ -32,7 +32,7 @@ public class CommentController {
     UserRepository userRepository;
 
     @PostMapping
-    public ResponseEntity<?> registerLikePost(@Valid @RequestBody CreateCommentRequest createCommentRequest) {
+    public ResponseEntity<?> registerComment(@Valid @RequestBody CreateCommentRequest createCommentRequest) {
         Long post_id = createCommentRequest.getPost_id();
         Long user_id = createCommentRequest.getUser_id();
         Date created_at = Timestamp.valueOf(LocalDateTime.now());
