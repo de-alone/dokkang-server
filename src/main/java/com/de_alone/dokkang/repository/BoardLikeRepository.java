@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface BoardLikeRepository extends JpaRepository<BoardLike, Long> {
     List<BoardLike> findAllByPostId(BoardPost boardPost);
+
+    Boolean existsByPostId(BoardPost boardPost);
 }
