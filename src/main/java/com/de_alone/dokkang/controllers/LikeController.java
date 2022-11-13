@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -37,14 +36,8 @@ public class LikeController {
         BoardPost boardPost = boardPostRepository.findById(post_id).orElseThrow(IllegalArgumentException::new);
         User user = userRepository.findById(user_id).orElseThrow(IllegalArgumentException::new);
 
-        if (boardLikeRepository.existsByPostId(boardPost)) {
-            List<BoardLike> like_list = boardLikeRepository.findAllByPostId(boardPost);
-
-            for(BoardLike like:like_list) {
-                if(like.getUserId().getId().equals(user_id)) {
-                    return ResponseEntity.status(HttpStatus.CONFLICT).body(new StatusResponse("error"));
-                }
-            }
+        if (boardLikeRepository.findByPostIdAndUserId(boardPost, user).size() > 0) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new StatusResponse("error"));
         }
 
         // Create new boardLike
