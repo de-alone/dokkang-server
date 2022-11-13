@@ -19,7 +19,7 @@ public class JwtUtils {
   private String jwtSecret;
 
   @Value("${dokkang.app.jwtExpirationMs}")
-  private int jwtExpirationMs;
+  private Long jwtExpirationMs;
 
   @Value("${dokkang.app.jwtCookieName}")
   private String jwtCookie;
