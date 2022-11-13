@@ -4,7 +4,6 @@ import com.de_alone.dokkang.models.*;
 import com.de_alone.dokkang.payload.request.CreatePostRequest;
 import com.de_alone.dokkang.payload.response.Comment;
 import com.de_alone.dokkang.payload.response.PostResponse;
-import com.de_alone.dokkang.payload.response.StatusResponse;
 import com.de_alone.dokkang.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

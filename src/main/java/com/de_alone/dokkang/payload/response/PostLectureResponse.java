@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Getter
@@ -14,5 +15,5 @@ public class PostLectureResponse {
 
     private List<PostLecture> posts;
 
-    private String before;
+    private Optional<String> before;
 }

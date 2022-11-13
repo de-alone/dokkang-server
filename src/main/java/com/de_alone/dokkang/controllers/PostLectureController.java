@@ -40,8 +40,7 @@ public class PostLectureController {
 
     @GetMapping("/{lecture_id}/posts")
     public ResponseEntity<?> readPostLectureDetail(@RequestParam(required=false) String jwt, @PathVariable Long lecture_id, @RequestParam Integer limit, @RequestParam Optional<String> before) {
-        String beforeValue = before.orElse(null);
-        LocalDateTime dateTime = beforeValue != null ? LocalDateTime.parse(beforeValue, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) : LocalDateTime.now();
+        LocalDateTime dateTime = before.isPresent() ? LocalDateTime.parse(before.get(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) : LocalDateTime.now();
 
         List<BoardPost> boardPost = boardPostRepository.findAllByLectureId(lectureRepository.findById(lecture_id).orElseThrow(IllegalArgumentException::new));
         Collections.reverse(boardPost);
@@ -56,14 +55,14 @@ public class PostLectureController {
                     List<BoardComment> comment_list = boardCommentRepository.findAllByPostId(post);
                     List<BoardLike> like_list = boardLikeRepository.findAllByPostId(post);
                     posts.add(new PostLecture(post.getId(), post.getLectureId().getId(), post.getTitle(), like_list.size() ,comment_list.size(), post.getCreated_at().toString()));
-                    beforeValue = post.getCreated_at().toLocalDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                    before = Optional.of(post.getCreated_at().toLocalDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
                     limit--;
                 }
             }
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(
-                new PostLectureResponse("ok", posts, beforeValue));
+                new PostLectureResponse("ok", posts, before));
     }
 }
 
