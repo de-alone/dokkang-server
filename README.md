@@ -4,6 +4,7 @@
 ![Spring](https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white)
 ![Gradle](https://img.shields.io/badge/Gradle-02303A.svg?style=for-the-badge&logo=Gradle&logoColor=white)
 ![GithubAction Test & Build](https://github.com/de-alone/dokkang-server/actions/workflows/test-and-build.yml/badge.svg)
+[![codecov](https://codecov.io/gh/de-alone/dokkang-server/branch/master/graph/badge.svg?token=C07Y129YPC)](https://codecov.io/gh/de-alone/dokkang-server)
 
 This is backend server of dokkang-dokkang application.
 
