@@ -1,14 +1,11 @@
 package com.de_alone.dokkang.controllers;
 
-import com.de_alone.dokkang.models.BoardComment;
-import com.de_alone.dokkang.models.BoardLike;
-import com.de_alone.dokkang.models.BoardPost;
+import com.de_alone.dokkang.models.*;
+import com.de_alone.dokkang.payload.response.LecturePostResponse;
+import com.de_alone.dokkang.payload.response.LectureStudyGroupResponse;
 import com.de_alone.dokkang.payload.response.PostLecture;
-import com.de_alone.dokkang.payload.response.LectureSpecificResponse;
-import com.de_alone.dokkang.repository.BoardCommentRepository;
-import com.de_alone.dokkang.repository.BoardLikeRepository;
-import com.de_alone.dokkang.repository.BoardPostRepository;
-import com.de_alone.dokkang.repository.LectureRepository;
+import com.de_alone.dokkang.payload.response.StudyGroupLecture;
+import com.de_alone.dokkang.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,8 +35,20 @@ public class LectureSpecificController {
     @Autowired
     BoardLikeRepository boardLikeRepository;
 
+    @Autowired
+    StudyGroupRepository studyGroupRepository;
+
+    @Autowired
+    StudyGroupCommentRepository studyGroupCommentRepository;
+
+    @Autowired
+    StudyGroupLikeRepository studyGroupLikeRepository;
+
+    @Autowired
+    StudyGroupParticipationRepository studyGroupParticipationRepository;
+
     @GetMapping("/{lecture_id}/posts")
-    public ResponseEntity<?> readLectureSpecificDetail(@RequestParam(required=false) String jwt, @PathVariable Long lecture_id, @RequestParam Integer limit, @RequestParam Optional<String> before) {
+    public ResponseEntity<?> readLecturePostDetail(@RequestParam(required=false) String jwt, @PathVariable Long lecture_id, @RequestParam Integer limit, @RequestParam Optional<String> before) {
         LocalDateTime dateTime = before.isPresent() ? LocalDateTime.parse(before.get(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) : LocalDateTime.now();
 
         List<BoardPost> boardPost = boardPostRepository.findAllByLectureId(lectureRepository.findById(lecture_id).orElseThrow(IllegalArgumentException::new));
@@ -62,7 +71,36 @@ public class LectureSpecificController {
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(
-                new LectureSpecificResponse("ok", posts, before));
+                new LecturePostResponse("ok", posts, before));
+    }
+
+    @GetMapping("/{lecture_id}/studygroups")
+    public ResponseEntity<?> readLectureStudyGroupDetail(@RequestParam(required=false) String jwt, @PathVariable Long lecture_id, @RequestParam Integer limit, @RequestParam Optional<String> before) {
+        LocalDateTime dateTime = before.isPresent() ? LocalDateTime.parse(before.get(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) : LocalDateTime.now();
+
+        List<StudyGroupPost> studyGroupPost = studyGroupRepository.findAllByLectureId(lectureRepository.findById(lecture_id).orElseThrow(IllegalArgumentException::new));
+        Collections.reverse(studyGroupPost);
+
+        List<StudyGroupLecture> studygroups = new ArrayList<>();
+        for(StudyGroupPost post:studyGroupPost) {
+            if(dateTime.isAfter(post.getCreated_at().toLocalDateTime())){
+                if (limit <= 0) {
+                    break;
+                }
+                else {
+                    List<StudyGroupComment> comment_list = studyGroupCommentRepository.findAllByPostId(post);
+                    List<StudyGroupLike> like_list = studyGroupLikeRepository.findAllByPostId(post);
+                    List<StudyGroupParticipation> participants_list = studyGroupParticipationRepository.findAllByPostId(post);
+                    Boolean opened = ((participants_list.size() + 1) < post.getStudycapacity()); // 참여자 + 개설자 < 정원
+                    studygroups.add(new StudyGroupLecture(post.getId(), post.getLectureId().getId(), post.getTitle(), like_list.size() ,comment_list.size(), post.getCreated_at().toString(), opened));
+                    before = Optional.of(post.getCreated_at().toLocalDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+                    limit--;
+                }
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new LectureStudyGroupResponse("ok", studygroups, before));
     }
 }
 
