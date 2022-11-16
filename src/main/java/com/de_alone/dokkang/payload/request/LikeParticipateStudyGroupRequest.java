@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class LikeStudyGroupRequest {
+public class LikeParticipateStudyGroupRequest {
     private Long studygroup_id;
     private Long user_id;
 }
