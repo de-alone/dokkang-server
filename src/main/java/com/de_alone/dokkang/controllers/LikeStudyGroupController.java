@@ -32,7 +32,7 @@ public class LikeStudyGroupController {
         StudyGroupPost studyGroupPost = studyGroupRepository.findById(studygroup_id).orElseThrow(IllegalArgumentException::new);
         User user = userRepository.findById(user_id).orElseThrow(IllegalArgumentException::new);
 
-        if (studyGroupLikeRepository.findByPostIdAndUserId(studyGroupPost, user).size() > 0) {
+        if (studyGroupLikeRepository.findByStudyGroupIdAndUserId(studyGroupPost, user).size() > 0) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new StatusResponse("error"));
         }
 

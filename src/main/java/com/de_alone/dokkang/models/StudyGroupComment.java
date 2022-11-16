@@ -24,7 +24,7 @@ public class StudyGroupComment {
 
     @ManyToOne
     @JoinColumn(name = "studygroup_id")
-    private StudyGroupPost studygroupId;
+    private StudyGroupPost studyGroupId;
 
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Date created_at;
@@ -33,7 +33,7 @@ public class StudyGroupComment {
     private String content;
 
     public StudyGroupComment(StudyGroupPost studygroup_id, User user_id, Date created_at, String content) {
-        this.studygroupId = studygroup_id;
+        this.studyGroupId = studygroup_id;
         this.userId = user_id;
         this.created_at = created_at;
         this.content = content;

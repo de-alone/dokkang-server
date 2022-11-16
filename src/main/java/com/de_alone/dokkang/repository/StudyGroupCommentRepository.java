@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface StudyGroupCommentRepository extends JpaRepository<StudyGroupComment, Long> {
-    List<StudyGroupComment> findAllByPostId(StudyGroupPost studyGroupPost);
+    List<StudyGroupComment> findAllByStudyGroupId(StudyGroupPost studyGroupId);
 }

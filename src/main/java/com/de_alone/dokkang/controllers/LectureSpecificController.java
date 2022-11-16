@@ -88,9 +88,9 @@ public class LectureSpecificController {
                     break;
                 }
                 else {
-                    List<StudyGroupComment> comment_list = studyGroupCommentRepository.findAllByPostId(post);
-                    List<StudyGroupLike> like_list = studyGroupLikeRepository.findAllByPostId(post);
-                    List<StudyGroupParticipation> participants_list = studyGroupParticipationRepository.findAllByPostId(post);
+                    List<StudyGroupComment> comment_list = studyGroupCommentRepository.findAllByStudyGroupId(post);
+                    List<StudyGroupLike> like_list = studyGroupLikeRepository.findAllByStudyGroupId(post);
+                    List<StudyGroupParticipation> participants_list = studyGroupParticipationRepository.findAllByStudyGroupId(post);
                     Boolean opened = ((participants_list.size() + 1) < post.getStudycapacity()); // 참여자 + 개설자 < 정원
                     studygroups.add(new StudyGroupLecture(post.getId(), post.getLectureId().getId(), post.getTitle(), like_list.size() ,comment_list.size(), post.getCreated_at().toString(), opened));
                     before = Optional.of(post.getCreated_at().toLocalDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));

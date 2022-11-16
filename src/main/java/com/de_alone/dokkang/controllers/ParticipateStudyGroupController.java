@@ -18,7 +18,7 @@ import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/studygroup-like")
+@RequestMapping("/studygroup-participant")
 public class ParticipateStudyGroupController {
     @Autowired
     StudyGroupParticipationRepository studyGroupParticipationRepository;
@@ -37,11 +37,11 @@ public class ParticipateStudyGroupController {
         StudyGroupPost studyGroupPost = studyGroupRepository.findById(studygroup_id).orElseThrow(IllegalArgumentException::new);
         User user = userRepository.findById(user_id).orElseThrow(IllegalArgumentException::new);
 
-        if (studyGroupParticipationRepository.findByPostIdAndUserId(studyGroupPost, user).size() > 0) {
+        if (studyGroupParticipationRepository.findByStudyGroupIdAndUserId(studyGroupPost, user).size() > 0) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new StatusResponse("error"));
         }
 
-        List<StudyGroupParticipation> participants_list = studyGroupParticipationRepository.findAllByPostId(studyGroupPost);
+        List<StudyGroupParticipation> participants_list = studyGroupParticipationRepository.findAllByStudyGroupId(studyGroupPost);
         if ((participants_list.size() + 1) >= studyGroupPost.getStudycapacity()) {
             return ResponseEntity.status(HttpStatus.LOCKED).body(new StatusResponse("error"));
         }
