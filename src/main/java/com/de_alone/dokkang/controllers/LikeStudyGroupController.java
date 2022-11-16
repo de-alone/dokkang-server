@@ -36,7 +36,7 @@ public class LikeStudyGroupController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new StatusResponse("error"));
         }
 
-        // Create new boardLike
+        // Create new studyGroupLike
         StudyGroupLike studyGroupLike = new StudyGroupLike(studyGroupPost, user);
         studyGroupLikeRepository.save(studyGroupLike);
 
