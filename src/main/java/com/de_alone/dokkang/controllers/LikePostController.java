@@ -18,7 +18,7 @@ import javax.validation.Valid;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/like")
-public class LikeController {
+public class LikePostController {
     @Autowired
     BoardLikeRepository boardLikeRepository;
 
