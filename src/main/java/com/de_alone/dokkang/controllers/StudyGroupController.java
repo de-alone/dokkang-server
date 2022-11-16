@@ -1,18 +1,18 @@
 package com.de_alone.dokkang.controllers;
 
-import com.de_alone.dokkang.models.Lecture;
-import com.de_alone.dokkang.models.StudyGroupPost;
-import com.de_alone.dokkang.models.User;
+import com.de_alone.dokkang.models.*;
 import com.de_alone.dokkang.payload.request.CreateStudyGroupRequest;
-import com.de_alone.dokkang.repository.LectureRepository;
-import com.de_alone.dokkang.repository.StudyGroupRepository;
-import com.de_alone.dokkang.repository.UserRepository;
+import com.de_alone.dokkang.payload.response.Comment;
+import com.de_alone.dokkang.payload.response.StudyGroupResponse;
+import com.de_alone.dokkang.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -27,6 +27,15 @@ public class StudyGroupController {
 
     @Autowired
     StudyGroupRepository studyGroupRepository;
+
+    @Autowired
+    StudyGroupLikeRepository studyGroupLikeRepository;
+
+    @Autowired
+    StudyGroupCommentRepository studyGroupCommentRepository;
+
+    @Autowired
+    StudyGroupParticipationRepository studyGroupParticipationRepository;
 
     @PostMapping
     public ResponseEntity<?> registerStudyGroup(@Valid @RequestBody CreateStudyGroupRequest createStudyGroupRequest) {
@@ -46,5 +55,40 @@ public class StudyGroupController {
         studyGroupRepository.save(studyGroupPost);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("status", "ok", "studygroup_id", studyGroupPost.getId()));
+    }
+
+    @GetMapping("/{studygroup_id}")
+    public ResponseEntity<?> readStudyGroupDetail(@RequestParam(required=false) String jwt, @PathVariable Long studygroup_id) {
+        StudyGroupPost studyGroupPost = studyGroupRepository.findById(studygroup_id).orElseThrow(IllegalArgumentException::new);
+        List<StudyGroupLike> like_list = studyGroupLikeRepository.findAllByPostId(studyGroupPost);
+        List<StudyGroupParticipation> participants_list = studyGroupParticipationRepository.findAllByPostId(studyGroupPost);
+        List<StudyGroupComment> comment_list = studyGroupCommentRepository.findAllByPostId(studyGroupPost);
+
+        Long lecture_id = studyGroupPost.getLectureId().getId();
+        Long user_id = studyGroupPost.getUserId().getId();
+        String username = studyGroupPost.getUserId().getUsername();
+        String title = studyGroupPost.getTitle();
+        String content = studyGroupPost.getContent();
+        String created_at = String.valueOf(studyGroupPost.getCreated_at());
+        String studytime = studyGroupPost.getStudytime();
+        String studyplace = studyGroupPost.getStudyplace();
+        Integer studycapacity = studyGroupPost.getStudycapacity();
+        Integer num_likes = like_list.size();
+
+        // get username list
+        List<String> participants = new ArrayList<>();
+        participants.add(username);
+        for(StudyGroupParticipation participation:participants_list) {
+            participants.add(participation.getUserId().getUsername());
+        }
+
+        // Create comments
+        List<Comment> comments = new ArrayList<>();
+        for(StudyGroupComment comment:comment_list) {
+            comments.add(new Comment(comment.getId(), comment.getUserId().getId(), comment.getContent(), String.valueOf(comment.getCreated_at())));
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new StudyGroupResponse("ok", studygroup_id, lecture_id, user_id, username, title, content, created_at, num_likes, comments, participants, studytime, studyplace, studycapacity));
     }
 }
