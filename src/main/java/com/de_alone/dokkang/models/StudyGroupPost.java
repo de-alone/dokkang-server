@@ -43,7 +43,6 @@ public class StudyGroupPost {
     @NotBlank
     private String studyplace;
 
-    @NotBlank
     private Integer studycapacity;
 
     public StudyGroupPost(Lecture lecture_id, User user_id, String title, String content, String studytime, String studyplace, Integer studycapacity) {
