@@ -10,7 +10,7 @@ import java.util.Optional;
 @AllArgsConstructor
 @Getter
 @Setter
-public class PostLectureResponse {
+public class LectureSpecificResponse {
     private String status;
 
     private List<PostLecture> posts;

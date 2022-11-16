@@ -4,7 +4,7 @@ import com.de_alone.dokkang.models.BoardComment;
 import com.de_alone.dokkang.models.BoardLike;
 import com.de_alone.dokkang.models.BoardPost;
 import com.de_alone.dokkang.payload.response.PostLecture;
-import com.de_alone.dokkang.payload.response.PostLectureResponse;
+import com.de_alone.dokkang.payload.response.LectureSpecificResponse;
 import com.de_alone.dokkang.repository.BoardCommentRepository;
 import com.de_alone.dokkang.repository.BoardLikeRepository;
 import com.de_alone.dokkang.repository.BoardPostRepository;
@@ -24,7 +24,7 @@ import java.util.Optional;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/lecture")
-public class PostLectureController {
+public class LectureSpecificController {
 
     @Autowired
     LectureRepository lectureRepository;
@@ -39,7 +39,7 @@ public class PostLectureController {
     BoardLikeRepository boardLikeRepository;
 
     @GetMapping("/{lecture_id}/posts")
-    public ResponseEntity<?> readPostLectureDetail(@RequestParam(required=false) String jwt, @PathVariable Long lecture_id, @RequestParam Integer limit, @RequestParam Optional<String> before) {
+    public ResponseEntity<?> readLectureSpecificDetail(@RequestParam(required=false) String jwt, @PathVariable Long lecture_id, @RequestParam Integer limit, @RequestParam Optional<String> before) {
         LocalDateTime dateTime = before.isPresent() ? LocalDateTime.parse(before.get(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) : LocalDateTime.now();
 
         List<BoardPost> boardPost = boardPostRepository.findAllByLectureId(lectureRepository.findById(lecture_id).orElseThrow(IllegalArgumentException::new));
@@ -62,7 +62,7 @@ public class PostLectureController {
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(
-                new PostLectureResponse("ok", posts, before));
+                new LectureSpecificResponse("ok", posts, before));
     }
 }
 
