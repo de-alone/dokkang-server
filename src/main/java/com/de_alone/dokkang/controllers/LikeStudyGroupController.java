@@ -1,7 +1,7 @@
 package com.de_alone.dokkang.controllers;
 
 import com.de_alone.dokkang.models.*;
-import com.de_alone.dokkang.payload.request.LikeStudyGroupRequest;
+import com.de_alone.dokkang.payload.request.LikeParticipateStudyGroupRequest;
 import com.de_alone.dokkang.payload.response.StatusResponse;
 import com.de_alone.dokkang.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +25,9 @@ public class LikeStudyGroupController {
     UserRepository userRepository;
 
     @PostMapping
-    public ResponseEntity<?> registerLikeStudyGroup(@Valid @RequestBody LikeStudyGroupRequest likeStudyGroupRequest) {
-        Long studygroup_id = likeStudyGroupRequest.getStudygroup_id();
-        Long user_id = likeStudyGroupRequest.getUser_id();
+    public ResponseEntity<?> registerLikeStudyGroup(@Valid @RequestBody LikeParticipateStudyGroupRequest likeParticipateStudyGroupRequest) {
+        Long studygroup_id = likeParticipateStudyGroupRequest.getStudygroup_id();
+        Long user_id = likeParticipateStudyGroupRequest.getUser_id();
 
         StudyGroupPost studyGroupPost = studyGroupRepository.findById(studygroup_id).orElseThrow(IllegalArgumentException::new);
         User user = userRepository.findById(user_id).orElseThrow(IllegalArgumentException::new);
