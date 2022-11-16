@@ -23,10 +23,10 @@ public class StudyGroupParticipation {
 
     @ManyToOne
     @JoinColumn(name = "studygroup_id")
-    private StudyGroupPost studygroupId;
+    private StudyGroupPost studyGroupId;
 
     public StudyGroupParticipation(StudyGroupPost studygroup_id, User user_id) {
-        this.studygroupId = studygroup_id;
+        this.studyGroupId = studygroup_id;
         this.userId = user_id;
     }
 }

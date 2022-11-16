@@ -8,9 +8,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface StudyGroupLikeRepository extends JpaRepository<StudyGroupLike, Long> {
-    List<StudyGroupLike> findAllByPostId(StudyGroupPost studyGroupPost);
+    List<StudyGroupLike> findAllByStudyGroupId(StudyGroupPost studyGroupId);
 
-    Boolean existsByPostId(StudyGroupPost studyGroupPost);
+    Boolean existsByStudyGroupId(StudyGroupPost studyGroupId);
 
-    List<StudyGroupLike> findByPostIdAndUserId(StudyGroupPost studygroup_id, User userId);
+    List<StudyGroupLike> findByStudyGroupIdAndUserId(StudyGroupPost studyGroupId, User userId);
 }

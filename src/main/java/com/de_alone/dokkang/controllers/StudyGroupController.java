@@ -60,9 +60,9 @@ public class StudyGroupController {
     @GetMapping("/{studygroup_id}")
     public ResponseEntity<?> readStudyGroupDetail(@RequestParam(required=false) String jwt, @PathVariable Long studygroup_id) {
         StudyGroupPost studyGroupPost = studyGroupRepository.findById(studygroup_id).orElseThrow(IllegalArgumentException::new);
-        List<StudyGroupLike> like_list = studyGroupLikeRepository.findAllByPostId(studyGroupPost);
-        List<StudyGroupParticipation> participants_list = studyGroupParticipationRepository.findAllByPostId(studyGroupPost);
-        List<StudyGroupComment> comment_list = studyGroupCommentRepository.findAllByPostId(studyGroupPost);
+        List<StudyGroupLike> like_list = studyGroupLikeRepository.findAllByStudyGroupId(studyGroupPost);
+        List<StudyGroupParticipation> participants_list = studyGroupParticipationRepository.findAllByStudyGroupId(studyGroupPost);
+        List<StudyGroupComment> comment_list = studyGroupCommentRepository.findAllByStudyGroupId(studyGroupPost);
 
         Long lecture_id = studyGroupPost.getLectureId().getId();
         Long user_id = studyGroupPost.getUserId().getId();
