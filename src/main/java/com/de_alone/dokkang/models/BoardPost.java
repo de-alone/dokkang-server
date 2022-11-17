@@ -43,4 +43,16 @@ public class BoardPost {
         this.title = title;
         this.content = content;
     }
+    public BoardPost(Long id, Lecture lecture_id, User user_id, String title, String content) {
+        this.id = id;
+        this.lectureId = lecture_id;
+        this.userId = user_id;
+        this.title = title;
+        this.content = content;
+    }
+    //For Test
+
+    public void setCreated_at(Timestamp created_at) {
+        this.created_at = created_at;
+    }
 }
