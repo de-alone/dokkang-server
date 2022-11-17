@@ -67,7 +67,6 @@ class CommentControllerTest {
 
     @DisplayName("RegisterComment Test")
     @Test
-    @WithMockUser(username = "user", password = "password")
     public void testRegisterComment() throws Exception {
         Long post_id = 100L;
         user.setId(10L);
