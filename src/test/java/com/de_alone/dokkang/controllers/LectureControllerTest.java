@@ -43,7 +43,7 @@ class LectureControllerTest {
 
     @DisplayName("Get all Lectures Test")
     @Test
-    public void testSignUp() throws Exception {
+    public void getLecture() throws Exception {
         given(lectureRepository.findAll()).willReturn(lectures);
 
         RequestBuilder request = MockMvcRequestBuilders.get("/lectures");
