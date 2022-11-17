@@ -31,8 +31,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import com.de_alone.dokkang.DokkangServerApplication;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 @RunWith(SpringRunner.class)
@@ -41,7 +43,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = DokkangServerApplication.class)
 class PostLectureControllerTest {
 
-    MockMvc mockMvc;
+    @Autowired
+    private MockMvc mockMvc;
 
     @MockBean
     LectureRepository lectureRepository;
@@ -54,42 +57,55 @@ class PostLectureControllerTest {
 
     @MockBean
     BoardLikeRepository boardLikeRepository;
+    Long lecture_id = 101L;
+    Lecture lecture = new Lecture(lecture_id, "SWE3033", "Software Engineering", "Cha");
 
+    User user1 = new User(1L, "username", "email@email.com", "password");
+    User user2 = new User(2L, "user", "email@email.com", "password");
+
+    BoardPost boardPost1 = new BoardPost(1L, lecture, user1 , "test of board1", "content");
+
+    BoardPost boardPost2 = new BoardPost(2L, lecture, user2, "test of board2","content");
+
+
+    BoardComment boardComment1
+            = new BoardComment(boardPost1, user1, new Date(), "content" );
+    BoardComment boardComment2
+            = new BoardComment(boardPost1, user1, new Date(), "content");
+
+    BoardLike boardLike
+            = new BoardLike(1L, user2, boardPost1);
+    BoardLike boardLike2
+            = new BoardLike(2L, user1, boardPost2);
     @DisplayName("get Post Lecture Detail")
     @Test
-    public void testReadPostLectureDetail_yesBefore() throws Exception {
-        // Have to be same lecture_id
-        Long lecture_id = 101L;
-        Lecture lecture = new Lecture();
-        lecture.setId(lecture_id);
+    @WithMockUser(username="username", password="password")
+    public void testReadPostLectureDetail_yesBefore_NotYetDeveloped() throws Exception {
+        boardPost1.setCreated_at(Timestamp.valueOf(LocalDateTime.now()));
+        boardPost2.setCreated_at(Timestamp.valueOf(LocalDateTime.now()));
 
-        User user1 = new User();
-        User user2 = new User();
-        user1.setId(1L);
-        user2.setId(2L);
-
-        BoardPost boardPost1 = new BoardPost(lecture, user1 , "test", "content");
-        BoardPost boardPost2 = new BoardPost(lecture, user2, "test","content");
-        boardPost1.setId(1L);
-        boardPost2.setId(2L);
-
-        BoardComment boardComment1
-                = new BoardComment(boardPost1, user1, Timestamp.valueOf("2022-10-20 10:20:30"), "content" );
-        BoardComment boardComment2
-                = new BoardComment(boardPost1, user1,Timestamp.valueOf("2022-12-20 12:20:33"), "content");
-
-        List<BoardPost> ListofBoardPost = List.of(boardPost1, boardPost2);
+        List<BoardPost> listOfBoardPost = new ArrayList<>();
+        listOfBoardPost.add(boardPost1);
+        listOfBoardPost.add(boardPost2);
 
         given(lectureRepository.findById(lecture_id)).willReturn(Optional.of(lecture));
-        given(boardPostRepository.findAllByLectureId(lecture)).willReturn(ListofBoardPost);
+        given(boardPostRepository.findAllByLectureId(lecture)).willReturn(listOfBoardPost);
 
-        Integer limit = 20;
-        String before = "2022-12-22 12:34:56";
-        RequestBuilder request = MockMvcRequestBuilders.get("/101/posts")
-                .param("limit", String.valueOf(limit))
-                .param("before", before);
+        when(boardCommentRepository.findAllByPostId(boardPost1)).thenReturn(List.of(boardComment1, boardComment2));
+        when(boardCommentRepository.findAllByPostId(boardPost2)).thenReturn(List.of());
 
-        mockMvc.perform(request);
+        when(boardLikeRepository.findAllByPostId(boardPost1)).thenReturn(List.of(boardLike));
+        when(boardLikeRepository.findAllByPostId(boardPost2)).thenReturn(List.of(boardLike2));
+
+
+
+
+        RequestBuilder request = MockMvcRequestBuilders.get("/lecture/101/posts")
+                .param("limit", String.valueOf(20))
+                .param("before", "2022-12-22 12:34:56");
+
+        mockMvc.perform(request)
+                .andDo(print());
     }
 
 
