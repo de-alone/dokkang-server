@@ -3,6 +3,7 @@ package com.de_alone.dokkang.controllers;
 import com.de_alone.dokkang.models.UserLecture;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.hamcrest.collection.IsCollectionWithSize;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -10,10 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.context.junit4.SpringRunner;
-
 import java.sql.Array;
 import java.util.*;
 
@@ -29,9 +30,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import com.de_alone.dokkang.DokkangServerApplication;
 import com.de_alone.dokkang.models.Lecture;
 import com.de_alone.dokkang.models.User;
+
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 @RunWith(SpringRunner.class)
@@ -94,16 +98,24 @@ class UserControllerTest {
 
     @DisplayName("Get Lectures of User Test")
     @Test
+    @WithMockUser(username = "user", password="password")
     public void testGetLecturesOfUser() throws Exception {
         List<Long> userLectureIDs = List.of(0L, 1L);
-        Lecture lecture = new Lecture(0L, "SWE-0001", "Software1", "김민수");
+        Lecture lecture = new Lecture(0L, "SWE-0001", "Software1", "Kim");
+        Lecture lecture2 = new Lecture(0L, "SWE-0002", "Software2", "Cha");
 
         given(userLectureRepository.findLectureById(0L)).willReturn(userLectureIDs);
-        given(lectureRepository.findAllById(userLectureIDs)).willReturn(List.of(lecture));
+        given(lectureRepository.findAllById(userLectureIDs)).willReturn(List.of(lecture, lecture2));
 
         RequestBuilder request = MockMvcRequestBuilders.get("/user/0/lectures");
 
-        mockMvc.perform(request);
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.lectures",hasSize(2)))
+                .andDo(print())
+                .andReturn();
+
+
     }
 
     @DisplayName("Testing updateUserLecture")
