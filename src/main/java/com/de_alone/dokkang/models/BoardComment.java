@@ -38,4 +38,11 @@ public class BoardComment {
         this.created_at = created_at;
         this.content = content;
     }
+    public BoardComment(Long id, BoardPost post_id, User user_id, Date created_at, String content) {
+        this.id = id;
+        this.postId = post_id;
+        this.userId = user_id;
+        this.created_at = created_at;
+        this.content = content;
+    }
 }
