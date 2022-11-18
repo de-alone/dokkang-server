@@ -38,4 +38,11 @@ public class StudyGroupComment {
         this.created_at = created_at;
         this.content = content;
     }
+    public StudyGroupComment(Long id, StudyGroupPost studygroup_id, User user_id, Date created_at, String content) {
+        this.id = id;
+        this.studyGroupId = studygroup_id;
+        this.userId = user_id;
+        this.created_at = created_at;
+        this.content = content;
+    }
 }

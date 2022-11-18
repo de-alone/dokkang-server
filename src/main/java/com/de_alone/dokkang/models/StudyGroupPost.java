@@ -54,4 +54,17 @@ public class StudyGroupPost {
         this.studyplace = studyplace;
         this.studycapacity = studycapacity;
     }
+
+    public StudyGroupPost(Long id, Lecture lecture_id, User user_id, String title, String content,
+                          String studytime, String studyplace, Integer studycapacity) {
+        this.id = id;
+        this.lectureId = lecture_id;
+        this.userId = user_id;
+        this.title = title;
+        this.content = content;
+        this.studytime = studytime;
+        this.studyplace = studyplace;
+        this.studycapacity = studycapacity;
+    }
 }
+
