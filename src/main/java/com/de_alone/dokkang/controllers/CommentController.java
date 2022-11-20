@@ -43,8 +43,8 @@ public class CommentController {
 
         // Create new boardComment
         BoardComment boardComment = new BoardComment(boardPost, user, created_at, content);
-        boardCommentRepository.save(boardComment);
+        BoardComment savedBoardComment = boardCommentRepository.save(boardComment);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("status", "ok", "comment_id", boardComment.getId()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("status", "ok", "comment_id", savedBoardComment.getId()));
     }
 }

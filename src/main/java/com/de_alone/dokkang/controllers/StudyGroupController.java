@@ -52,9 +52,9 @@ public class StudyGroupController {
 
         // Create new study group
         StudyGroupPost studyGroupPost = new StudyGroupPost(lecture, user, title, content, studytime, studyplace, studycapacity);
-        studyGroupRepository.save(studyGroupPost);
+        StudyGroupPost savedStudyGroupPost = studyGroupRepository.save(studyGroupPost);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("status", "ok", "studygroup_id", studyGroupPost.getId()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("status", "ok", "studygroup_id", savedStudyGroupPost.getId()));
     }
 
     @GetMapping("/{studygroup_id}")

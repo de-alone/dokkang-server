@@ -46,9 +46,9 @@ public class PostController {
 
         // Create new post
         BoardPost boardPost = new BoardPost(lecture, user, title, content);
-        boardPostRepository.save(boardPost);
+        BoardPost savedBoardPost = boardPostRepository.save(boardPost);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("status", "ok", "post_id", boardPost.getId()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("status", "ok", "post_id", savedBoardPost.getId()));
     }
 
     @GetMapping("/{post_id}")

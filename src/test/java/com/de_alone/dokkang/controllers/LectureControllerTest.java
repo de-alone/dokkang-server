@@ -4,6 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -43,6 +44,7 @@ class LectureControllerTest {
 
     @DisplayName("Get all Lectures Test")
     @Test
+    @WithMockUser(username="username", password="password")
     public void getLecture() throws Exception {
         given(lectureRepository.findAll()).willReturn(lectures);
 

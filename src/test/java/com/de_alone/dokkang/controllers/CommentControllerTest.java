@@ -1,10 +1,12 @@
 package com.de_alone.dokkang.controllers;
 
 import com.de_alone.dokkang.models.*;
+import com.de_alone.dokkang.payload.request.CreateCommentRequest;
 import com.de_alone.dokkang.repository.BoardCommentRepository;
 import com.de_alone.dokkang.repository.BoardPostRepository;
 import com.de_alone.dokkang.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.assertj.core.api.Assertions;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.jupiter.api.DisplayName;
@@ -59,6 +61,11 @@ class CommentControllerTest {
 
     BoardPost boardPost = new BoardPost(lecture, user, "board title", "board content" );
 
+    CreateCommentRequest createCommentRequest = new CreateCommentRequest(
+            boardPost.getId(),
+            user.getId(),
+            "content"
+    );
     @Autowired
     private MockMvc mockMvc;
 
@@ -76,40 +83,37 @@ class CommentControllerTest {
 
     @DisplayName("RegisterComment Test")
     @Test
-    @WithMockUser(username="username", password="password")
+    @WithMockUser(username = "username", password = "password")
     public void testRegisterComment() throws Exception {
-        Long post_id = 100L;
-        user.setId(10L);
-        Long user_id = user.getId();
-        Long comment_id = 10000L;
-
-        Date created_at = Timestamp.valueOf(LocalDateTime.now());
-        String content = "Test of Test";
-
-        BoardComment boardComment = new BoardComment(0L, boardPost, user, created_at, content);
+        Long post_id = boardPost.getId();
+//        Assertions.assertThat(createCommentRequest.getPost_id()).isEqualTo(boardPost.getId());
+        Long user_id = createCommentRequest.getUser_id();
         given(boardPostRepository.findById(post_id)).willReturn(Optional.of(boardPost));
         given(userRepository.findById(user_id)).willReturn(Optional.of(user));
-//      FIXME : Unappropriate method of setting id, as AUTO_INCREMENTed on id on normal situation
 
-        given(boardCommentRepository.save(any(BoardComment.class))).willReturn(boardComment);
+        BoardComment boardComment
+                = new BoardComment(1L, boardPost, user, Timestamp.valueOf(LocalDateTime.now()), "content");
+
         boardCommentRepository.save(boardComment);
+        given(boardCommentRepository.save(any(BoardComment.class))).willReturn(boardComment);
+        verify(boardCommentRepository).save(repoCaptor.capture());
+        final BoardComment actual = repoCaptor.getValue();
+        assertThat(boardComment.getId()).isEqualTo(actual.getId());
+
+
         Map<String, Object> input = new HashMap<>();
-        input.put("post_id", post_id);
-        input.put("user_id", user_id);
-        input.put("content", content);
+        input.put("post_id", createCommentRequest.getPost_id());
+        input.put("user_id", createCommentRequest.getUser_id());
+        input.put("content", createCommentRequest.getContent());
 
         ObjectMapper objectMapper = new ObjectMapper();
-
         RequestBuilder request = MockMvcRequestBuilders.post("/comment")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(input));
 
-        //FIXME!!
-//        mockMvc.perform(request)
-//                .andDo(print());
+        mockMvc.perform(request)
+                .andExpect(status().is2xxSuccessful())
+                .andDo(print());
 
-        verify(boardCommentRepository).save(repoCaptor.capture());
-        final BoardComment actual = repoCaptor.getValue();
-        assertThat(boardComment.getId()).isEqualTo(actual.getId());
     }
 }

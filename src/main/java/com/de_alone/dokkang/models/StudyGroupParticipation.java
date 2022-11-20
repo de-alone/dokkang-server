@@ -29,4 +29,11 @@ public class StudyGroupParticipation {
         this.studyGroupId = studygroup_id;
         this.userId = user_id;
     }
+
+    public StudyGroupParticipation(Long id, StudyGroupPost studygroup_id, User user_id)
+    {
+        this.id = id;
+        this.studyGroupId = studygroup_id;
+        this.userId = user_id;
+    }
 }

@@ -39,8 +39,7 @@ public class CommentStudyGroupController {
 
         // Create new studyGroupComment
         StudyGroupComment studyGroupComment = new StudyGroupComment(studyGroupPost, user, created_at, content);
-        studyGroupCommentRepository.save(studyGroupComment);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("status", "ok", "comment_id", studyGroupComment.getId()));
+        StudyGroupComment savedStudyGroupComment = studyGroupCommentRepository.save(studyGroupComment);
+        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("status", "ok", "comment_id", savedStudyGroupComment.getId()));
     }
 }

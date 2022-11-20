@@ -3,6 +3,7 @@ package com.de_alone.dokkang.controllers;
 
 import com.de_alone.dokkang.DokkangServerApplication;
 import com.de_alone.dokkang.models.*;
+import com.de_alone.dokkang.payload.request.CreateCommentRequest;
 import com.de_alone.dokkang.repository.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -28,6 +29,7 @@ import java.util.*;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -42,7 +44,7 @@ import com.de_alone.dokkang.models.Lecture;
 @ContextConfiguration
 @AutoConfigureMockMvc
 @SpringBootTest(classes = DokkangServerApplication.class)
-class commentStudyGroupControllerTest {
+class CommentStudyGroupControllerTest {
 
     Long testLectureId = 10L;
     Long studyGroupId = 100L;
@@ -63,7 +65,8 @@ class commentStudyGroupControllerTest {
             "place of study",
             10
     );
-    StudyGroupComment studyGroupComment;
+    StudyGroupComment studyGroupComment = new StudyGroupComment(0L, studyGroupPost, user, created_at, content);
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -87,26 +90,36 @@ class commentStudyGroupControllerTest {
         given(userRepository.findById(user.getId())).willReturn(Optional.of(user));
 
         StudyGroupComment studyGroupComment = new StudyGroupComment(0L, studyGroupPost, user, created_at, content);
-
-//        when(studyGroupCommentRepository.save(studyGroupComment)).then
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        HashMap<String, Object> input = new HashMap<>();
-        input.put("studygroup_id", studyGroupId);
-        input.put("user_id", user.getId());
-        input.put("content", content);
-
-        RequestBuilder request = MockMvcRequestBuilders.post("/studygroup-comment")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(input));
-//          FIXME!!!
-//        mockMvc.perform(request)
-//                .andExpect(status().isOk())
-//                .andDo(print());
+        studyGroupCommentRepository.save(studyGroupComment);
 
         verify(studyGroupCommentRepository).save(repoCaptor.capture());
         final StudyGroupComment actual = repoCaptor.getValue();
         assertThat(studyGroupComment.getStudyGroupId()).isEqualTo(actual.getStudyGroupId());
     }
+
+    @DisplayName("RegisterCommentStudyGroup")
+    @Test
+    @WithMockUser(username="username", password="password")
+    public void testRegisterCommentStudyGroup_API() throws Exception {
+        HashMap<String, Object> input = new HashMap<>();
+        input.put("studygroup_id", studyGroupId);
+        input.put("user_id", user.getId());
+        input.put("content", content);
+
+        given(studyGroupRepository.findById(studyGroupId)).willReturn(Optional.ofNullable(studyGroupPost));
+        given(userRepository.findById(user.getId())).willReturn(Optional.of(user));
+        given(studyGroupCommentRepository.save(any(StudyGroupComment.class))).willReturn(studyGroupComment);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        RequestBuilder request = MockMvcRequestBuilders.post("/studygroup-comment")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(input));
+
+        mockMvc.perform(request)
+                .andExpect(status().is2xxSuccessful())
+                .andDo(print());
+    }
+
 }
 
