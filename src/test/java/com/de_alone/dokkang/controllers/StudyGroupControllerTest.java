@@ -42,7 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ContextConfiguration
 @AutoConfigureMockMvc
 @SpringBootTest(classes = DokkangServerApplication.class)
-public class StudyGroupControllerTest {
+class StudyGroupControllerTest {
     Lecture lecture = new Lecture(1L, "SWE3033", "Introduction to SE", "Cha");
     User user = new User(1L, "user", "email@email.com", "password");
     User user2 = new User(2L, "username", "email", "password");

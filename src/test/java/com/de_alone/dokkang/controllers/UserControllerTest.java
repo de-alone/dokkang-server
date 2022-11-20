@@ -83,15 +83,59 @@ class UserControllerTest {
 
         mockMvc.perform(request);
     }
+    @DisplayName("SignUp Test")
+    @Test
+    public void testSignUp_existuser() throws Exception {
+        User user = new User("username", "email.email", "password");
+
+        given(userRepository.existsByUsername(username)).willReturn(true);
+        given(userRepository.existsByEmail(email)).willReturn(false);
+
+        Map<String, String> input = new HashMap<>();
+        input.put("username", username);
+        input.put("password", password);
+        input.put("email", email);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        RequestBuilder request = MockMvcRequestBuilders.post("/user")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(input));
+
+        mockMvc.perform(request).andExpect(status().is(409)).andDo(print());
+    }
+    @DisplayName("SignUp Test")
+    @Test
+    public void testSignUp_existemail() throws Exception {
+        User user = new User("user_name", "email.email", "password");
+
+        given(userRepository.existsByUsername(username)).willReturn(false);
+        given(userRepository.existsByEmail(email)).willReturn(true);
+
+        Map<String, String> input = new HashMap<>();
+        input.put("username", username);
+        input.put("password", password);
+        input.put("email", email);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        RequestBuilder request = MockMvcRequestBuilders.post("/user")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(input));
+
+        mockMvc.perform(request).andExpect(status().is(409)).andDo(print());
+
+    }
 
     @DisplayName("ReadUserDetail")
     @Test
+    @WithMockUser(username = "user", password="password")
     public void testReadUserDetail() throws Exception{
         Long testId = 0L;
         User user = new User("testUserName", "test@test.com", "testPassword");
         given(userRepository.findById(testId)).willReturn(Optional.of(user));
 
-        RequestBuilder request = MockMvcRequestBuilders.get("/user");
+        RequestBuilder request = MockMvcRequestBuilders.get("/user/{id}", testId);
 
         mockMvc.perform(request);
     }
